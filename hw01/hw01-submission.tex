@@ -21,26 +21,26 @@
     \item Suppose the 3 students are $\{A, B, C\}$ and the 3 internships are
       $\{a, b, c\}$. The preferences for the students are:
       \begin{itemize}
-        \item $A$: $a$, $b$, $c$
-        \item $B$: $a$, $b$, $c$
-        \item $C$: $c$, $a$, $c$
+        \item $A$: $a$, $c$, $b$
+        \item $B$: $a$, $c$, $b$
+        \item $C$: $c$, $a$, $b$
       \end{itemize}
       The preferences for the internships are:
       \begin{itemize}
         \item $a$: $C$, $A$, $B$
-        \item $b$: $A$, $B$, $C$
-        \item $c$: $B$, $C$, $A$
+        \item $b$: $B$, $C$, $B$
+        \item $c$: $A$, $B$, $C$
       \end{itemize}
       The 5 rounds proceed as follows:
       \begin{enumerate}[label={(\arabic*)}]
         \item $A$ applies to $a$, $B$ applies to $a$, and $C$ applies to $c$.
           $a$ defers $A$, $a$ rejects $B$, and $c$ defers $C$.
-        \item $B$ applies to $b$. $b$ defers $B$ and $b$ rejects $C$.
+        \item $B$ applies to $c$. $c$ defers $B$ and $c$ rejects $C$.
         \item $C$ applies to $a$. $a$ defers $C$ and $a$ rejects $A$.
-        \item $A$ applies to $b$. $b$ defers $A$ and $b$ rejects $B$.
-        \item $B$ applies to $c$. $c$ defers $B$.
+        \item $A$ applies to $c$. $c$ defers $A$ and $c$ rejects $B$.
+        \item $B$ applies to $b$. $b$ defers $B$.
       \end{enumerate}
-      The stable matchings found by the algorithm are thus $\{(A, b), (B, c),
+      The stable matchings found by the algorithm are thus $\{(A, c), (B, b),
       (C, a)\}$.
   \end{enumerate}
 \end{question}
