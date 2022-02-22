@@ -1,0 +1,94 @@
+\documentclass{amsart}
+
+\usepackage[vlined,linesnumbered]{algorithm2e}
+\usepackage{enumitem}
+
+\title{COSC-373: Homework 1}
+\author{Lee Jiaen}
+\author{Hyery Yoo}
+\author{Alexander Lee}
+
+\theoremstyle{definition}
+\newtheorem{question}{Question}
+
+\newcommand{\dist}{\text{dist}}
+
+\begin{document}
+\maketitle
+
+\begin{question}
+  \begin{enumerate}[label={(\alph*)}]
+    \item Suppose the 3 students are $\{A, B, C\}$ and the 3 internships are
+      $\{a, b, c\}$. The preferences for the students are:
+      \begin{itemize}
+        \item $A$: $a$, $b$, $c$
+        \item $B$: $a$, $b$, $c$
+        \item $C$: $c$, $a$, $c$
+      \end{itemize}
+      The preferences for the internships are:
+      \begin{itemize}
+        \item $a$: $C$, $A$, $B$
+        \item $b$: $A$, $B$, $C$
+        \item $c$: $B$, $C$, $A$
+      \end{itemize}
+      The 5 rounds proceed as follows:
+      \begin{enumerate}[label={(\arabic*)}]
+        \item $A$ applies to $a$, $B$ applies to $a$, and $C$ applies to $c$.
+          $a$ defers $A$, $a$ rejects $B$, and $c$ defers $C$.
+        \item $B$ applies to $b$. $b$ defers $B$ and $b$ rejects $C$.
+        \item $C$ applies to $a$. $a$ defers $C$ and $a$ rejects $A$.
+        \item $A$ applies to $b$. $b$ defers $A$ and $b$ rejects $B$.
+        \item $B$ applies to $c$. $c$ defers $B$.
+      \end{enumerate}
+      The stable matchings found by the algorithm are thus $\{(A, b), (B, c),
+      (C, a)\}$.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  \begin{enumerate}[label={(\alph*)}]
+    \item The stable matching found by the Gale-Shapley algorithm for such
+      instances are $\{(s_1, u_1), (s_2, u_2), \ldots, (s_n, u_n)\}$. $n$ rounds
+      are required until the algorithm terminates.
+    \item TODO
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  \begin{enumerate}[label={(\alph*)}]
+    \item The centralized greedy algorithm executes as follows.
+      \begin{algorithm}[h]
+        \DontPrintSemicolon%
+        \SetKwFunction{neighbors}{neighbors}
+        $M \gets \emptyset$\;
+        $V_M \gets \emptyset$ \tcp{set of vertices that are matched in $M$}
+        \ForEach{$v \in V$}{
+          \ForEach{$u \in \neighbors{v}$}{
+            \If{$v, u \notin V_M$}{
+              $M \gets M \cup \{(v, u)\}$\;
+              $V_M \gets V_M \cup \{v, u\}$\;
+            }
+          }
+        }
+        \Return{$M$}
+      \end{algorithm}
+    \item Since we are iterating over the neighbors for each vertex, we are thus
+      iterating over the set of edges in $G$. Therefore, the runtime of our
+      procedure is $O(m)$.
+    \item Let $G = (V, E)$ where $V = \{a, b, c, d\}$ and $E = \{(a,b), (b,c),
+      (c,d)\}$. Two maximal matchings are $M_1 = \{(a,b), (c,d)\}$ and $M_2 =
+      \{(b,c)\}$. Observe that $|M_1| = 2 |M_2|$.
+  \end{enumerate}
+\end{question}
+
+\begin{question}
+  Suppose for the sake of contradiction that $\dist(u, w) > \dist(u, v) +
+  \dist(v, w)$. That is, the length of the shortest path from $u$ to $v$ plus
+  the length of the shortest path from $v$ to $w$ is less than the length of the
+  shortest path from $u$ to $w$. The assumption thus implies that there exists a
+  path from $u$ to $w$ that is shorter than the shortest path from $u$ to $w$.
+  Clearly, this is a contradiction. Therefore, $\dist$ satisfies the triangle
+  inequality.
+\end{question}
+
+\end{document}
