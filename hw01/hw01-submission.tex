@@ -76,8 +76,9 @@
         \Return{$M$}
       \end{algorithm}
     \item Since we are iterating over the neighbors for each vertex, we are thus
-      iterating over the set of edges in $G$. Therefore, the runtime of our
-      procedure is $O(m)$.
+      iterating over the set of edges in $G$. Assuming $M$ and $V_M$ are hash
+      sets, where lookup and add operations take $O(1)$ time, the runtime of our
+      procedure is therefore $O(m)$.
     \item Let $G = (V, E)$ where $V = \{a, b, c, d\}$ and $E = \{(a,b), (b,c),
       (c,d)\}$. Two maximal matchings are $M_1 = \{(a,b), (c,d)\}$ and $M_2 =
       \{(b,c)\}$. Observe that $|M_1| = 2 |M_2|$.
