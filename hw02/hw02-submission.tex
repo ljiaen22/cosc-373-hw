@@ -17,21 +17,116 @@
 \maketitle
 
 \begin{question}
+  Let $G_1 = (\{v_1, u_1, u_2, u_3, u_4, u_5\}, \{(v_1, u_1),(v_1, u_2),(u_1, u_3),(u_3,u_4),(u_4,u_5)\})$
+  \\and $G_2 = (\{v_2, u_1, u_2, u_3, u_4, u_5\}, \{(v_2, u_1),(v_2, u_2),(u_1, u_3),(u_2, u_3),(u_3,u_4),(u_4,u_5)\})$. Both have diameter $D=4$. The MCM of $G_1$ is $\{(v_1, u_2),(u_1, u_3),(u_4,u_5)\}$, and a MCM of $G_2$ is $\{(v_2,u_1),(u_2,u_3),(u_4,u_5)\}$. Note that $v_1$ and $v_2$ have different partners, so $G_1$ and $G_2$ have different solutions to MCM. The distance $D/2-1=1$ neighborhoods of $v_1$ and $v_2$ are identical: $\Gamma_1(v_1) = \Gamma_1(v_2) = (\{u_1, u_2\},\{(v_{1 or 2}, u_1), (v_{1 or 2},u_2)\})$. $G_1$ and $G_2$ are indistinguishable in $D/2-1$ rounds, so at least $D/2$ rounds are required to solve MCM. 
 \end{question}
 
+\newpage
 \begin{question}
   \begin{enumerate}[label={(\alph*)}]
-    \item
-    \item
-    \item
-    \item
+  \item Each node does the following:
+    \begin{algorithm}[h]
+      \DontPrintSemicolon%
+      $V \gets \{my\_id\}$\;
+      $E = \emptyset$\;
+      \ForEach{$i \in \{0, 1, \dots, d\}$}{
+        \If{$i = 0$}{
+          send $my\_id$, $V$, $E$\;
+        }
+        \If{received messages}{
+          \ForEach{$m \in messages$}{
+            $E \gets E \cup m.E \cup \{my\_id, m.my\_id\}$\;
+            $V \gets V \cup m.V$\;
+          }
+        }
+        send $my\_id$, $V$, $E$\;
+      }
+      $\Gamma_d(v) \gets (V, E)$\;
+      \Return{$\Gamma_d(v)$}
+    \end{algorithm}
+    
+  \item Each node does the following:
+    \begin{algorithm}[h]
+      \DontPrintSemicolon%
+      $V = \{my\_id\}$\;
+      $E = \emptyset$\;
+      \ForEach{$round \quad i$}{
+        \If{$i = 0$}{
+          send $my\_id$, $V$, $E$\;
+        }
+        \If{received messages}{
+          \ForEach{$m \in messages$}{
+            $E \gets E \cup m.E \cup \{my\_id, m.my\_id\}$\;
+            $V \gets V \cup m.V$\;
+          }
+        }
+        \If{$V$ is unchanged}{
+          halt\;
+        }
+        send $my\_id$, $V$, $E$\;
+      }
+      $G \gets (V, E)$\;
+      \Return{$G$}
+    \end{algorithm}
+    
+  \item By locality lemma, in $D+1$ rounds, the state of each node is determined by the node's D neighborhood. D is the diameter of the graph, so the D neighborhood of any node is the entire graph G. Every node knows about the entire graph in $D+1$ rounds and terminates in one additional round, so any graph problem can be solved in $D+2$ rounds total.
+  \item $O(nlogn + mlogn) = O((n+m)logn)$
   \end{enumerate}
 \end{question}
 
+\newpage
 \begin{question}
   \begin{enumerate}[label={(\alph*)}]
-    \item
-    \item
+  \item Let $G_1 = (V=\{v_1, u_1, u_2\}, E=\{(v_1, u_1), (u_1, u_2)\})$ and
+    \\$G_2 = (V=\{v_2, u_1, u_2, u_3\}, E=\{(v_1, u_1), (u_1, u_2), (u_1, u_3)\})$.
+    \\$G_1$ and $G_2$ have different sizes (3 and 4, respectively). The diameter $D$ of both graphs is 2. At round $D-1 = 1$, $v_1$ and $v_2$ know their 1 neighborhood, which identically consist of node $u_1$ and an edge to node $u_1$. The two graphs are indistinguishable in $D-1$ rounds. SIZE cannot be solved in fewer than $D$ rounds. 
+    \item Modify the leader election algorithm as the following:
+      \begin{algorithm}[h]
+        \DontPrintSemicolon%
+        $cur\_leader \gets my\_id$\;
+        $parent \gets \bot$\;
+        $children \gets \emptyset$\;
+        $done \gets false$\;
+        $size = 1$\;
+        $updated \gets true$\;
+        \For{$round \quad 1$}{
+          send message $`my\_id'$\;
+        }
+        \ForEach{$round \quad r>1$}{
+          \If{received message $`leader\_id'$ with $leader\_id<cur\_leader$}{
+            $cur\_leader \gets leader\_id$\;
+            $parent \gets $ neighbor that sent $leader\_id$\;
+            $children \gets \emptyset$\;
+            send parent message $`parent'$\;
+            send others message $`leader\_id'$\;
+            $updated \gets true$\;
+            $done \gets false$\;
+          }
+          \Else{
+          \If{$updated$}{
+            \If {received $`parent'$ from $u$}{
+              add $u$ to $children$\;
+            }
+            \If {$children = \emptyset$}{
+              $done \gets true$\;
+              send parent message $(done, size)$\;
+            }
+            $updated \gets false$\;
+          }
+          \If{not done and received $(done, branch\_size)$ from all children}{
+            $done \gets true$\;
+            $size \gets size + $ sum of $branch\_size$s from all children\;
+            \If{$my\_id = cur\_leader$}{
+              output $size$\;
+            }
+            \Else{
+              send message $(done, size)$ to parent\;
+            }
+          }
+          }
+        }
+      \end{algorithm}
+    
   \end{enumerate}
 \end{question}
 
